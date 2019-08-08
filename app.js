@@ -1,10 +1,16 @@
 var createError = require("http-errors");
+var cookieSession = require("cookie-session");
+
 var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+var config = require("./config.js");
 
 var indexRouter = require("./routes/index");
+var newsRouter = require("./routes/news");
+var quizRouter = require("./routes/quiz");
+var adminRouter = require("./routes/admin");
 
 var app = express();
 
@@ -18,7 +24,34 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use(
+  cookieSession({
+    name: config.nameSession,
+    keys: config.keySession,
+
+    // Cookie Options
+    maxAge: config.maxAge
+  })
+);
+// app.use(
+//   cookieSession({
+//     name: "session",
+//     keys: ["MOJ"],
+
+//     // Cookie Options
+//     maxAge: 24 * 60 * 60 * 1000 // 24 hours
+//   })
+// );
+
+app.use((req, res, next) => {
+  res.locals.path = req.path;
+  next();
+});
+
 app.use("/", indexRouter);
+app.use("/news", newsRouter);
+app.use("/quiz", quizRouter);
+app.use("/admin", adminRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
