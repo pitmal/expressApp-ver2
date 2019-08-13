@@ -1,0 +1,19 @@
+extends ../layout
+
+block content
+  h1= title
+  a(href='admin/add') Dodaj
+  p Welcome to #{title}
+    table
+      th Tytuł artykułu
+      th Tresc artylułu
+      th Data utworzenia
+      if newsData !== undefined
+        each data in newsData
+          tr 
+            td=data.title
+            td=data.description
+            td=data.date
+              a(href=`admin/delete/${data._id}`) Usuń
+
+

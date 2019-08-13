@@ -6,6 +6,15 @@ body {
 a {
   color: #00b7ff;
 }
-.active {
+.active,
+.title {
   font-weight: bold;
+}
+.description {
+  margin-bottom: 30px;
+  padding: 10px;
+  border-bottom: 1px solid grey;
+}
+span {
+  font-weight: normal;
 }

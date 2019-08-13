@@ -7,10 +7,16 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var config = require("./config.js");
 
+var mongoose = require("mongoose");
+mongoose.connect(config.db, { useNewUrlParser: true });
+var db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error:"));
+
 var indexRouter = require("./routes/index");
 var newsRouter = require("./routes/news");
 var quizRouter = require("./routes/quiz");
 var adminRouter = require("./routes/admin");
+var apiRouter = require("./routes/api");
 
 var app = express();
 
@@ -33,15 +39,6 @@ app.use(
     maxAge: config.maxAge
   })
 );
-// app.use(
-//   cookieSession({
-//     name: "session",
-//     keys: ["MOJ"],
-
-//     // Cookie Options
-//     maxAge: 24 * 60 * 60 * 1000 // 24 hours
-//   })
-// );
 
 app.use((req, res, next) => {
   res.locals.path = req.path;
@@ -52,6 +49,7 @@ app.use("/", indexRouter);
 app.use("/news", newsRouter);
 app.use("/quiz", quizRouter);
 app.use("/admin", adminRouter);
+app.use("/api", apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

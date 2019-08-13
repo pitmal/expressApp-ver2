@@ -3,3 +3,21 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+  if show
+    form(method="post")
+      p Jaki jest twoj ulubiony język programowania ?
+        ul
+          each quiz in dataQuiz 
+            li
+              input(type="radio" name="quiz" value=quiz.title) 
+              label=quiz.title
+      input(type="submit" value="Zagłosuj")
+  else
+    p Wyniki głosowania
+      ul
+        each quiz in dataQuiz 
+          li
+            p=`${quiz.title} - głosów=${quiz.vote}`
+              span=` (${Math.round(quiz.vote/sum*100)}%)`
+      p Liczba głosów = #{sum}
+
